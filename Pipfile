@@ -1,0 +1,25 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pandas = "*"
+dacite = "*"
+pydantic = "*"
+
+[dev-packages]
+pytest = "*"
+ruff = "*"
+mypy = "*"
+mock = "*"
+types-mock = "*"
+
+[requires]
+python_version = "3.12"
+
+[scripts]
+typecheck = "mypy --check-untyped-defs ."
+codestyle = "sh -c 'ruff format && ruff check --fix'"
+tests = "python -m pytest tests/test.py"
+all = "sh -c 'pipenv run typecheck && pipenv run codestyle && pipenv run tests'"

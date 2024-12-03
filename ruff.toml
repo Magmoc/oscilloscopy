@@ -1,0 +1,27 @@
+line-length = 120
+exclude = [
+    ]
+
+[lint]
+
+# https://docs.astral.sh/ruff/rules
+select = [
+    "E", 
+    "W",
+    "F", 
+    "N",
+    "I",
+    ]
+
+ignore = [
+    "F401",
+    
+    "D106",
+    "D107",
+
+    "D203", # Had to choose between D203 and D211
+    "D213", # Had to choose between D212 and D213
+    ]
+
+[lint.per-file-ignores]
+"src/*/tests.py" = ["D100"] # Ignore docstring for tests modules.
