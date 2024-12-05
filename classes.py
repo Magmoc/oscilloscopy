@@ -12,17 +12,12 @@ class Channel(Enum):
     channel_2 = "CH2"
 
 
-@dataclass
-class ChannelData:
-    time: npt.NDArray[np.float64]
-    data: npt.NDArray[np.float64]
-
-
 class Unit(Enum):
     # TODO add more units
-    voltage = "V"
-    current = "A"
-    seconds = "s"
+    volt = "V"
+    millivolt = "mV"
+    ampere = "A"
+    second = "s"
 
 
 class Parameters(Enum):
@@ -101,3 +96,10 @@ class OscilloscoPyHeader(BaseModel):
         filtered_dict = OscilloscoPyHeader.filter_keys(parsed_dict)
 
         return cls(**filtered_dict)
+
+
+@dataclass
+class ChannelData:
+    parameters: OscilloscoPyHeader
+    time: npt.NDArray[np.float64]
+    data: npt.NDArray[np.float64]

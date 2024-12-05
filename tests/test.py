@@ -1,8 +1,6 @@
 import unittest
 from pathlib import Path
 
-import mock
-
 from classes import Channel, OscilloscoPyHeader, Unit
 from oscilloscopy import OscilloscopeData
 
@@ -45,10 +43,10 @@ class TestOscilloscopy(unittest.TestCase):
             sample_interval=2.0e-10,
             trigger_point=1.25e3,
             source=Channel.channel_1,
-            vertical_units=Unit.voltage,
+            vertical_units=Unit.volt,
             vertical_scale=1,
             vertical_offset=-2.4,
-            horizontal_units=Unit.seconds,
+            horizontal_units=Unit.second,
             horizontal_scale=5e-8,
             y_zero=0,
             probe_attenuation=1,
@@ -80,19 +78,22 @@ class TestOscilloscopy(unittest.TestCase):
 
         expected = OscilloscoPyHeader.from_dict(data)
 
-        fake_instance = mock.Mock()
-        result = OscilloscopeData._parse_header(fake_instance, self.testfile)
+        result = OscilloscopeData._parse_header(self.testfile)
 
         self.assertEqual(expected, result)
 
-    def test_array(self) -> None:
+    def test_array_length(self) -> None:
         """
         Assume that all testing data will be fine if all data is imported,
         since there are no transformations on the data in the code itself.
         """
-        result = OscilloscopeData.parse_from_csv(self.testfile)
+        result = OscilloscopeData.from_csv(self.testfile)
+
+        assert result.channel_1
 
         length = len(result.channel_1.data)
+
+        # according to the user manual, there must always be 2500 data points
         expected_length = 2500
 
         self.assertEqual(length, expected_length)
