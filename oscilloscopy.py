@@ -4,6 +4,7 @@ from typing import Optional, Self
 import pandas as pd
 
 from classes import Channel, ChannelData, OscilloscoPyHeader
+from errors import CustomFolderStructureError, EmptyFolderError, NoChannelDataPresentError
 
 OSCILLOSCOPE_FILE_EXTENSIONS = [
     ".csv",
@@ -33,7 +34,7 @@ class OscilloscopeData:
         input_path: Optional[Path] = None,
     ) -> None:
         if not (channel_1 or channel_2):
-            raise ValueError("Channel 1 or Channel 2 must have a value.")
+            raise NoChannelDataPresentError("Channel 1 or Channel 2 must have a value.")
 
         self.channel_1 = channel_1
         self.channel_2 = channel_2
@@ -53,6 +54,7 @@ class OscilloscopeData:
 
         entries = {x.get(PARAMETER): x.get(VALUE) for x in df.to_dict("records")}
 
+        # TODO should raise error here
         return OscilloscoPyHeader.from_dict(entries)
 
     @staticmethod
@@ -90,9 +92,12 @@ class OscilloscopeData:
         for extension in OSCILLOSCOPE_FILE_EXTENSIONS:
             files.extend(input_path.glob(f"**/*{extension}"))
 
+        if not len(files):
+            raise EmptyFolderError("Empty folder!")
+
         if len(files) > 2:
             # TODO: Better error
-            raise KeyError(
+            raise CustomFolderStructureError(
                 "This is not a folder from the Oscilloscope. It does not work with changed folders... yet..."
             )
 
@@ -104,10 +109,10 @@ class OscilloscopeData:
         channel_2 = None
 
         for data in datalist:
-            if data.parameters.source == Channel.channel_1:
-                channel_1 = data
-
-            if data.parameters.source == Channel.channel_2:
-                channel_2 = data
+            match data.parameters.source:
+                case Channel.channel_1:
+                    channel_1 = data
+                case Channel.channel_2:
+                    channel_2 = data
 
         return cls(channel_1, channel_2, input_path)

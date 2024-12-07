@@ -6,6 +6,8 @@ import numpy as np
 import numpy.typing as npt
 from pydantic import BaseModel
 
+from errors import InvalidParameterError, MissingParameterError
+
 
 class Channel(Enum):
     channel_1 = "CH1"
@@ -89,9 +91,15 @@ class OscilloscoPyHeader(BaseModel):
 
                 parsed_dict[parsed_key.name] = parsed_val
 
-            # TODO: Use appropriate error
-            except KeyError:
-                raise KeyError("Something went wrong with parsing...")
+            # TODO for all custom cases an error should be raised if it is not appropriate
+            except Exception:
+                raise InvalidParameterError(f"Parameter is present that is not an actual parameter: {key}")
+
+        expected_parameters_set = set([e.name for e in Parameters])
+        parameters_set = set(parsed_dict.keys())
+        if parameters_set != expected_parameters_set:
+            absent_parameters = expected_parameters_set - parameters_set
+            raise MissingParameterError(f"Not all parameters are present: {list(absent_parameters)}")
 
         filtered_dict = OscilloscoPyHeader.filter_keys(parsed_dict)
 
