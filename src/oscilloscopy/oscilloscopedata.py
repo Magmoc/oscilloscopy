@@ -3,8 +3,8 @@ from typing import Optional, Self
 
 import pandas as pd
 
-from classes import Channel, ChannelData, OscilloscoPyHeader
-from errors import CustomFolderStructureError, EmptyFolderError, NoChannelDataPresentError
+from oscilloscopy.classes import Channel, ChannelData, Parameters
+from oscilloscopy.errors import CustomFolderStructureError, EmptyFolderError, NoChannelDataPresentError
 
 OSCILLOSCOPE_FILE_EXTENSIONS = [
     ".csv",
@@ -41,7 +41,7 @@ class OscilloscopeData:
         self.input_path = input_path
 
     @staticmethod
-    def _parse_header(input: Path) -> OscilloscoPyHeader:
+    def _parse_header(input: Path) -> Parameters:
         df = pd.read_csv(
             input,
             usecols=[0, 1],
@@ -55,7 +55,7 @@ class OscilloscopeData:
         entries = {x.get(PARAMETER): x.get(VALUE) for x in df.to_dict("records")}
 
         # TODO should raise error here
-        return OscilloscoPyHeader.from_dict(entries)
+        return Parameters.from_dict(entries)
 
     @staticmethod
     def _parse_channel(input_file: Path) -> ChannelData:

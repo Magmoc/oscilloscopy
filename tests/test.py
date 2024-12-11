@@ -1,15 +1,15 @@
 import unittest
 from pathlib import Path
 
-from classes import Channel, OscilloscoPyHeader, Unit
-from errors import (
+from oscilloscopy.classes import Channel, Parameters, Unit
+from oscilloscopy.errors import (
     CustomFolderStructureError,
     EmptyFolderError,
     InvalidParameterError,
     MissingParameterError,
     NoChannelDataPresentError,
 )
-from oscilloscopy import OscilloscopeData
+from oscilloscopy.oscilloscopedata import OscilloscopeData
 
 TEST_FOLDER_1 = "./tests/files/test1"
 
@@ -50,9 +50,9 @@ class TestOscilloscopy(unittest.TestCase):
             "Firmware Version": "FV:v24.26",
         }
 
-        test = OscilloscoPyHeader.from_dict(data)
+        test = Parameters.from_dict(data)
 
-        expected = OscilloscoPyHeader(
+        expected = Parameters(
             record_length=2.5e3,
             sample_interval=2.0e-10,
             trigger_point=1.25e3,
@@ -95,7 +95,7 @@ class TestOscilloscopy(unittest.TestCase):
         }
 
         with self.assertRaises(InvalidParameterError) as e:
-            OscilloscoPyHeader.from_dict(data)
+            Parameters.from_dict(data)
 
         self.assertIn(weird_entry, str(e.exception))
 
@@ -119,7 +119,7 @@ class TestOscilloscopy(unittest.TestCase):
         }
 
         with self.assertRaises(MissingParameterError) as _:
-            OscilloscoPyHeader.from_dict(data)
+            Parameters.from_dict(data)
 
     def test_header(self) -> None:
         data = {
@@ -140,7 +140,7 @@ class TestOscilloscopy(unittest.TestCase):
             "Firmware Version": "FV:v24.26",
         }
 
-        expected = OscilloscoPyHeader.from_dict(data)
+        expected = Parameters.from_dict(data)
 
         result = OscilloscopeData._parse_header(self.testfile_ch1)
 

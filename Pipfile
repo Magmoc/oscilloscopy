@@ -22,6 +22,6 @@ python_version = "3.12"
 [scripts]
 typecheck = "mypy --check-untyped-defs ."
 codestyle = "sh -c 'ruff format && ruff check --fix'"
-tests = "python -m pytest tests/test.py"
+tests = "pytest tests/test.py"
 coverage = "sh -c 'pipenv run tests --cov --cov-report=html:./coverage'"
 all = "sh -c 'pipenv run typecheck && pipenv run codestyle && pipenv run tests'"

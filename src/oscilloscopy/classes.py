@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 from pydantic import BaseModel
 
-from errors import InvalidParameterError, MissingParameterError
+from oscilloscopy.errors import InvalidParameterError, MissingParameterError
 
 
 class Channel(Enum):
@@ -22,7 +22,7 @@ class Unit(Enum):
     second = "s"
 
 
-class Parameters(Enum):
+class ParameterType(Enum):
     record_length = "Record Length"
     sample_interval = "Sample Interval"
     trigger_point = "Trigger Point"
@@ -40,7 +40,7 @@ class Parameters(Enum):
     firmware_version = "Firmware Version"
 
 
-class OscilloscoPyHeader(BaseModel):
+class Parameters(BaseModel):
     record_length: float
     sample_interval: float
     trigger_point: float
@@ -74,19 +74,19 @@ class OscilloscoPyHeader(BaseModel):
 
         for key, val in entry_dict.items():
             try:
-                parsed_key = Parameters(key)
+                parsed_key = ParameterType(key)
                 parsed_val = val
 
-                if parsed_key in [Parameters.source]:
+                if parsed_key in [ParameterType.source]:
                     parsed_val = Channel(val)
 
                 if parsed_key in [
-                    Parameters.vertical_units,
-                    Parameters.horizontal_units,
+                    ParameterType.vertical_units,
+                    ParameterType.horizontal_units,
                 ]:
                     parsed_val = Unit(val)
 
-                if parsed_key in [Parameters.probe_attenuation]:
+                if parsed_key in [ParameterType.probe_attenuation]:
                     parsed_val = int(float(val))
 
                 parsed_dict[parsed_key.name] = parsed_val
@@ -95,19 +95,19 @@ class OscilloscoPyHeader(BaseModel):
             except Exception:
                 raise InvalidParameterError(f"Parameter is present that is not an actual parameter: {key}")
 
-        expected_parameters_set = set([e.name for e in Parameters])
+        expected_parameters_set = set([e.name for e in ParameterType])
         parameters_set = set(parsed_dict.keys())
         if parameters_set != expected_parameters_set:
             absent_parameters = expected_parameters_set - parameters_set
             raise MissingParameterError(f"Not all parameters are present: {list(absent_parameters)}")
 
-        filtered_dict = OscilloscoPyHeader.filter_keys(parsed_dict)
+        filtered_dict = Parameters.filter_keys(parsed_dict)
 
         return cls(**filtered_dict)
 
 
 @dataclass
 class ChannelData:
-    parameters: OscilloscoPyHeader
+    parameters: Parameters
     time: npt.NDArray[np.float64]
     data: npt.NDArray[np.float64]
