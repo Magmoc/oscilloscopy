@@ -1,6 +1,6 @@
-# OscilloscoPy
+# oscilloscopy
 
-OscilloscoPy is a Python package to easily parse oscilloscope data. 
+`oscilloscopy` is a Python package to easily parse oscilloscope data. 
 
 ## Installation
 
