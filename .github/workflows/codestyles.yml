@@ -14,8 +14,8 @@ jobs:
           python-version: '3.12'
       - name: Install dependencies
         run: |
-          pip install pipenv
-          pipenv install --dev
+          pip install poetry
+          poetry install
       - name: Run codestyle
         run: |
-          pipenv run codestyle
+          poetry run scripts/codestyle.sh

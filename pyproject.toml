@@ -1,27 +1,36 @@
 [tool.poetry]
 name = "oscilloscopy"
+description = "A Python package to parse oscilloscope data."
+authors = ["Erik van Weelderen", "erikvanweelderen@hotmail.nl"]
 version = "0.1.0"
-description = ""
-authors = ["Erik van Weelderen <erikvanweelderen@hotmail.nl>"]
-license = "LICENSE"
 readme = "README.md"
+license = "LICENSE"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+homepage = "https://github.com/Magmoc/oscilloscopy"
+
 
 [tool.poetry.dependencies]
 python = "^3.12"
+pydantic = "*"
 pandas = "*"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "*"
 ruff = "*"
 mypy = "*"
-pydantic = "*"
 pytest-cov = "*"
+build = "^1.2.2.post1"
+twine = "^6.0.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
-# pytest
+# Testing
 [tool.poetry.group.test.dependencies]  
 pytest = "^8.2.0"
 
@@ -33,6 +42,7 @@ testpaths = [
 ]
 
 
+# Typechecking
 [tool.mypy]
 python_version = "3.12"
 disallow_untyped_defs = true
@@ -46,6 +56,7 @@ module = "tests.*"
 disallow_untyped_defs = false
 
 
+# Formatting and linting
 [tool.ruff]
 line-length = 120
 

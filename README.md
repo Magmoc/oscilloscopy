@@ -4,7 +4,7 @@ OscilloscoPy is a Python package to easily parse oscilloscope data.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install oscilloscopy.
 
 ```bash
 pip install oscilloscopy
