@@ -1,0 +1,71 @@
+[tool.poetry]
+name = "oscilloscopy"
+version = "0.1.0"
+description = ""
+authors = ["Erik van Weelderen <erikvanweelderen@hotmail.nl>"]
+license = "LICENSE"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+pandas = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+ruff = "*"
+mypy = "*"
+pydantic = "*"
+pytest-cov = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+# pytest
+[tool.poetry.group.test.dependencies]  
+pytest = "^8.2.0"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+pythonpath = "src/"
+testpaths = [
+    "tests/*",
+]
+
+
+[tool.mypy]
+python_version = "3.12"
+disallow_untyped_defs = true
+ignore_missing_imports = true
+warn_unreachable = true
+follow_imports = "silent"
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# https://docs.astral.sh/ruff/rules
+select = [
+    "E", 
+    "W",
+    "F", 
+    "N",
+    "I",
+    ]
+
+ignore = [
+    "D106",
+    "D107",
+
+    "D203", # Had to choose between D203 and D211
+    "D213", # Had to choose between D212 and D213
+    ]
+
+[tool.ruff.lint.per-file-ignores]
+"src/*/tests.py" = ["D100"] # Ignore docstring for tests modules.
