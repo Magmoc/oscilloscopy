@@ -12,11 +12,8 @@ from oscilloscopy.errors import (
 from oscilloscopy.oscilloscopedata import OscilloscopeData
 
 TEST_FOLDER_1 = "./tests/files/test1"
-
 TEST_FOLDER_MISSING_DATA = "./tests/files/missing_channel_data"
-
 TEST_FILE_CH_1 = "./tests/files/test1/F0001CH1.CSV"
-
 TEST_FOLDER_EMPTY = "./tests/files/empty_folder"
 TEST_CUSTOM_FOLDER_STRUCTURE = "./tests/files/folder_3_csv"
 
