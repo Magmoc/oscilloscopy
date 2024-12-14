@@ -40,6 +40,9 @@ class OscilloscopeData:
         self.channel_2 = channel_2
         self.input_path = input_path
 
+    def __str__(self) -> str:
+        return str(vars(self))
+
     @staticmethod
     def _parse_header(input: Path) -> Parameters:
         df = pd.read_csv(
